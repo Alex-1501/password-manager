@@ -20,22 +20,21 @@ def encryptPassword(password):
 def decryptPassword(f, password):
     return f.decrypt(password)
 
+# Registers A User
 def addUser():
     username = obtainUser()
     password = obtainPassword()
     token, f = encryptPassword(password)
     return {"username": username, "token": token, "key": f}
 
-
 def loginUser(user_data):
-    inputUser = input("\nPlease Enter Your Username To A Valid Account: ")
-    inputPassword = input("Please Enter Your Passphrase To A Valid Account: ")
+    inputUser = input("\nUsername: ")
+    inputPassword = input("Password: ")
 
     if inputUser != user_data['username'] or inputPassword != decryptPassword(user_data['key'], user_data['token']).decode():
         print("\n-----------------")
         print("-Login Incorrect-")
         print("-----------------")
-
         return False
     else:
         print("\n------------------")
@@ -43,17 +42,40 @@ def loginUser(user_data):
         print("------------------")
         return True
 
+def addPassword(stored_Passwords):
+    password = obtainPassword()
+    token, f = encryptPassword(password)
+    stored_Passwords['tokens'].append(token)
+    stored_Passwords['keys'].append(f)
+
 def main():
-    while(True):
+    user_data = {}
+    while True:
         flag = False
-        userInput = input("\nPress '1' to add an account\nPress '2' to login\nEnter Here: ")
+        userInput = input("\n[+] Press '1' To Register\n[+] Press '2' To Login\nEnter Here: ")
         if userInput == '1':
             user_data = addUser()
-            print(user_data)
         else:
             flag = loginUser(user_data)
             if flag:
+                print(f"Welcome {user_data['username']}")
+                stored_Passwords = {'tokens': [], 'keys': []}  # New dictionary for storing passwords
                 break
+    
+    while True:
+        userInput = input("\n[+] Press '1' To List All Stored Passwords\n[+] Press '2' To Add A Password\nEnter Here: ")
+        if userInput == '1':
+            if stored_Passwords.get('tokens'):
+                for token, key in zip(stored_Passwords['tokens'], stored_Passwords['keys']):
+                    decrypted_password = decryptPassword(key, token).decode()
+                    print(decrypted_password)
+            else:
+                print("No Passwords Found")
+        elif userInput == '2':
+            addPassword(stored_Passwords)
+            print("Password Added!")
+        else:
+            break
 
 if __name__ == "__main__":
     main()
