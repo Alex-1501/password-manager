@@ -12,27 +12,28 @@ def obtainPassword():
 def encryptPassword(password):
     # Generates A Key
     key = Fernet.generate_key()
-    # Creates Fernet Token
     f = Fernet(key)
     token = f.encrypt(password.encode())
+    print(f"token: {token}")
     return token, f
 
-def decryptPassword(token, password):
-    return token.decrypt(password)
+# Decrypts Password
+def decryptPassword(f, password):
+    return f.decrypt(password) 
 
 
 def addUser():
     username = obtainUser()
     password = obtainPassword()
-    encryptedPassword, token = encryptPassword(password)
-    return {"username": username, "password": encryptedPassword, "token": token}
+    token, f = encryptPassword(password)
+    return {"username": username, "token": token, "key": f}
 
 def main():
     # for every item in account output result
     user_data = addUser()
     print(user_data)
     print(f"\nUsername: {user_data['username']}")
-    print(f"Password: {decryptPassword(user_data['token'], user_data['password'])}")
+    print(f"Password: {decryptPassword(user_data['key'], user_data['token'])}")
 
 if __name__ == "__main__":
     main()
