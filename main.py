@@ -52,18 +52,20 @@ def main():
     user_data = {}
     while True:
         flag = False
-        userInput = input("\n[+] Press '1' To Register\n[+] Press '2' To Login\nEnter Here: ")
+        userInput = input("\n[+] Press '1' To Register\n[+] Press '2' To Login\n[+] Press 'E' To Exit\nEnter Here: ").lower()
         if userInput == '1':
             user_data = addUser()
-        else:
+        elif userInput == '2':
             flag = loginUser(user_data)
             if flag:
                 print(f"Welcome {user_data['username']}")
                 stored_Passwords = {'tokens': [], 'keys': []}  # New dictionary for storing passwords
                 break
+        elif userInput == 'e':
+            exit()
     
     while True:
-        userInput = input("\n[+] Press '1' To List All Stored Passwords\n[+] Press '2' To Add A Password\nEnter Here: ")
+        userInput = input("\n[+] Press '1' To List All Stored Passwords\n[+] Press '2' To Add A Password\n[+] Press 'E' To Exit\nEnter Here: ").lower()
         if userInput == '1':
             if stored_Passwords.get('tokens'):
                 for token, key in zip(stored_Passwords['tokens'], stored_Passwords['keys']):
@@ -74,8 +76,8 @@ def main():
         elif userInput == '2':
             addPassword(stored_Passwords)
             print("Password Added!")
-        else:
-            break
+        elif userInput == 'e':
+            exit()
 
 if __name__ == "__main__":
     main()
