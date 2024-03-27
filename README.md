@@ -1,5 +1,5 @@
 # password-manager
-Learning Python via Password Manager Project
+Enhancing My Python Skills via Password Manager Project
 
 Features:
 
